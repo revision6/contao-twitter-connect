@@ -105,7 +105,7 @@ class TwitterConnect extends \TwigSimpleHybrid
 			$client = new Client();
 			$client->addSubscriber($oauth);
 
-			$request  = $client->post($url);
+			$request  = $client->post($url, array('oauth_callback' => $redirectUrl));
 			$response = $request->send();
 
 			$body   = $response->getBody(true);
@@ -130,6 +130,8 @@ class TwitterConnect extends \TwigSimpleHybrid
 			\Controller::redirect($url);
 		}
 		catch (BadResponseException $exception) {
+			var_dump($exception->getResponse()->getBody(true));
+			die();
 			$redirectUrl .= '?' . http_build_query(
 					array(
 						'status_code'    => $exception->getResponse()->getStatusCode(),
@@ -180,8 +182,10 @@ class TwitterConnect extends \TwigSimpleHybrid
 					array(
 						'oauth_verifier' => $verifier
 					)
-				)
+				),
+				'application/x-www-form-urlencoded'
 			);
+
 			$response = $request->send();
 
 			parse_str($response->getBody(true), $params);
