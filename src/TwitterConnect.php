@@ -130,8 +130,6 @@ class TwitterConnect extends \TwigSimpleHybrid
 			\Controller::redirect($url);
 		}
 		catch (BadResponseException $exception) {
-			var_dump($exception->getResponse()->getBody(true));
-			die();
 			$redirectUrl .= '?' . http_build_query(
 					array(
 						'status_code'    => $exception->getResponse()->getStatusCode(),
