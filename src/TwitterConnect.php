@@ -308,7 +308,7 @@ class TwitterConnect extends \TwigSimpleHybrid
 					throw new \RuntimeException('Page ID ' . $this->twitter_connect_jumpTo . ' was not found');
 				}
 
-				\Controller::redirect($page->row());
+				\Controller::redirect(\Frontend::generateFrontendUrl($page->row()));
 			}
 
 			// redirect to start page
