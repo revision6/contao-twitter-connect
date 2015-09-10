@@ -96,11 +96,11 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['twitter_connect_jumpTo']     = array(
 );
 $GLOBALS['TL_DCA']['tl_module']['fields']['twitter_activation_required']     = array(
 	'label'      => &$GLOBALS['TL_LANG']['tl_module']['twitter_activation_required'],
-	'foreignKey' => 'tl_member_group.name',
+	'inputType'  => 'checkbox',
 	'eval'       => array(
 		'multiple'  => false,
 		'tl_class'  => 'clr',
 		'submitOnChange' => true,
 	),
-	'sql'        => 'char(255) NOT NULL default \'\''
+	'sql'        => 'char(1) NOT NULL default \'\''
 );

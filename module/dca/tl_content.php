@@ -97,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['twitter_connect_jumpTo']      = arra
 );
 $GLOBALS['TL_DCA']['tl_content']['fields']['twitter_activation_required']     = array(
 	'label'      => &$GLOBALS['TL_LANG']['tl_content']['twitter_activation_required'],
-	'foreignKey' => 'tl_member_group.name',
+	'inputType'  => 'checkbox',
 	'eval'       => array(
 		'multiple'  => false,
 		'tl_class'  => 'clr',
