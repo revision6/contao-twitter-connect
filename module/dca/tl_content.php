@@ -103,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['twitter_activation_required']     = 
 		'tl_class'  => 'clr',
 		'submitOnChange' => true,
 	),
-	'sql'        => 'char(255) NOT NULL default \'\''
+	'sql'        => 'char(1) NOT NULL default \'\''
 );
 
 if (in_array('notification_center', \ModuleLoader::getActive())) {
