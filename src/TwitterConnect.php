@@ -48,6 +48,12 @@ class TwitterConnect extends \TwigSimpleHybrid
 			return;
 		}
 
+		if (\Input::get('token') != '')
+		{
+			$this->activateAcount();
+			return;
+		}
+
 		if (empty($this->twitter_connect_api_key)) {
 			throw new \RuntimeException('No API KEY is defined!');
 		}
@@ -276,6 +282,53 @@ class TwitterConnect extends \TwigSimpleHybrid
 				);
 			\Controller::redirect($redirectUrl);
 		}
+	}
+
+	/**
+	 * Activate an account
+	 */
+	protected function activateAcount()
+	{
+		$this->strTemplate = 'mod_message';
+		$this->Template = new \FrontendTemplate($this->strTemplate);
+
+		// Check the token
+		$objMember = \MemberModel::findByActivation(\Input::get('token'));
+
+		if ($objMember === null)
+		{
+			$this->Template->type = 'error';
+			$this->Template->message = $GLOBALS['TL_LANG']['MSC']['accountError'];
+			return;
+		}
+
+		// Update the account
+		$objMember->disable = '';
+		$objMember->activation = '';
+		$objMember->save();
+
+		// HOOK: post activation callback
+		if (isset($GLOBALS['TL_HOOKS']['activateAccount']) && is_array($GLOBALS['TL_HOOKS']['activateAccount']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['activateAccount'] as $callback)
+			{
+				$this->import($callback[0]);
+				$this->$callback[0]->$callback[1]($objMember, $this);
+			}
+		}
+
+		// Log activity
+		$this->log('User account ID ' . $objMember->id . ' (' . $objMember->email . ') has been activated', __METHOD__, TL_ACCESS);
+
+		// Redirect to the jumpTo page
+		if (($objTarget = $this->objModel->getRelated('reg_jumpTo')) !== null)
+		{
+			$this->redirect($this->generateFrontendUrl($objTarget->row()));
+		}
+
+		// Confirm activation
+		$this->Template->type = 'confirm';
+		$this->Template->message = $GLOBALS['TL_LANG']['MSC']['accountActivated'];
 	}
 
 	/**
