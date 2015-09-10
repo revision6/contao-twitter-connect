@@ -248,10 +248,18 @@ class TwitterConnect extends \TwigSimpleHybrid
 			$member->twitter_token        = $params['oauth_token'];
 			$member->twitter_token_secret = $params['oauth_token_secret'];
 
+			// Disable when activation is required.
+			if ($this->twitter_activation_required) {
+				$member->disable = 1;
+			}
+
 			$event = new PostConnectEvent($params, $userData, $member, $newMember);
 			$eventDispatcher->dispatch(TwitterConnectEvents::POST_CONNECT, $event);
 
 			$event->getMember()->save();
+
+			// Compatibility for Contao modules.
+			$this->triggerCreateUserHook($member);
 
 			unset($_SESSION['TWITTER_CONNECT_PARAMS']);
 			$_SESSION['TWITTER_CONNECT_LOGIN'] = array($member->username, $params['oauth_token_secret']);
@@ -266,6 +274,24 @@ class TwitterConnect extends \TwigSimpleHybrid
 					)
 				);
 			\Controller::redirect($redirectUrl);
+		}
+	}
+
+	/**
+	 * Trigger the create user hook.
+	 *
+	 * @param \MemberModel $member The member model.
+	 */
+	protected function triggerCreateUserHook($member)
+	{
+		// HOOK: send insert ID and user data
+		if (isset($GLOBALS['TL_HOOKS']['createNewUser']) && is_array($GLOBALS['TL_HOOKS']['createNewUser']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['createNewUser'] as $callback)
+			{
+				$this->import($callback[0]);
+				$this->$callback[0]->$callback[1]($member->id, $member->row(), $this);
+			}
 		}
 	}
 

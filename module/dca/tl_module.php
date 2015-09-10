@@ -25,6 +25,7 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['twitter_connect'] = array(
 		'twitter_connect_api_key',
 		'twitter_connect_api_secret',
 		'twitter_connect_access_type',
+		'twitter_activation_required',
 		'twitter_connect_groups',
 		'twitter_connect_jumpTo'
 	),
@@ -88,4 +89,13 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['twitter_connect_jumpTo']     = array(
 		'tl_class' => 'clr',
 	),
 	'sql'       => 'int(10) NOT NULL default \'0\'',
+);
+$GLOBALS['TL_DCA']['tl_module']['fields']['twitter_activation_required']     = array(
+	'label'      => &$GLOBALS['TL_LANG']['tl_module']['twitter_activation_required'],
+	'foreignKey' => 'tl_member_group.name',
+	'eval'       => array(
+		'multiple'  => false,
+		'tl_class'  => 'w50',
+	),
+	'sql'        => 'char(255) NOT NULL default \'\''
 );
