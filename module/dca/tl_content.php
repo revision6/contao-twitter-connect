@@ -25,12 +25,17 @@ $GLOBALS['TL_DCA']['tl_content']['metapalettes']['twitter_connect'] = array(
 		'twitter_connect_api_key',
 		'twitter_connect_api_secret',
 		'twitter_connect_access_type',
+		'twitter_activation_required',
 		'twitter_connect_groups',
 		'twitter_connect_jumpTo'
 	),
 	'protected'       => array(':hide', 'protected'),
 	'expert'          => array(':hide', 'guests', 'cssID', 'space'),
 	'invisible'       => array(':hide', 'invisible', 'start', 'stop'),
+);
+
+$GLOBALS['TL_DCA']['tl_content']['metasubpalettes']['twitter_activation_required'] = array(
+	'nc_notification'
 );
 
 /**
@@ -90,3 +95,26 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['twitter_connect_jumpTo']      = arra
 	),
 	'sql'       => 'int(10) NOT NULL default \'0\'',
 );
+$GLOBALS['TL_DCA']['tl_content']['fields']['twitter_activation_required']     = array(
+	'label'      => &$GLOBALS['TL_LANG']['tl_content']['twitter_activation_required'],
+	'foreignKey' => 'tl_member_group.name',
+	'eval'       => array(
+		'multiple'  => false,
+		'tl_class'  => 'clr',
+		'submitOnChange' => true,
+	),
+	'sql'        => 'char(255) NOT NULL default \'\''
+);
+
+if (in_array('notification_center', \ModuleLoader::getActive())) {
+	$GLOBALS['TL_DCA']['tl_content']['fields']['nc_notification'] = array
+	(
+		'label'                     => &$GLOBALS['TL_LANG']['tl_content']['nc_notification'],
+		'exclude'                   => true,
+		'inputType'                 => 'select',
+		'options_callback'          => array('NotificationCenter\tl_module', 'getNotificationChoices'),
+		'eval'                      => array('includeBlankOption'=>true, 'chosen'=>true, 'tl_class'=>'w50'),
+		'sql'                       => "int(10) unsigned NOT NULL default '0'",
+		'relation'                  => array('type'=>'hasOne', 'load'=>'lazy', 'table'=>'tl_nc_notification'),
+	);
+}

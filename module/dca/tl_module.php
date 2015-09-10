@@ -33,6 +33,10 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['twitter_connect'] = array(
 	'expert'           => array(':hide', 'guests', 'cssID', 'space'),
 );
 
+$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['twitter_activation_required'] = array(
+	'nc_notification'
+);
+
 /**
  * Fields
  */
@@ -95,7 +99,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['twitter_activation_required']     = a
 	'foreignKey' => 'tl_member_group.name',
 	'eval'       => array(
 		'multiple'  => false,
-		'tl_class'  => 'w50',
+		'tl_class'  => 'clr',
+		'submitOnChange' => true,
 	),
 	'sql'        => 'char(255) NOT NULL default \'\''
 );

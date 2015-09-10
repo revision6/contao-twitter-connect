@@ -39,6 +39,10 @@ $GLOBALS['TL_LANG']['tl_content']['twitter_connect_jumpTo']      = array(
 	'Redirect page',
 	'Please choose the page to which visitors will be redirected after successful log-in.'
 );
+$GLOBALS['TL_LANG']['tl_content']['twitter_activation_required']      = array(
+	'Send activation mail',
+	'User is disabled by default. He has to use the activation mail first.'
+);
 
 /**
  * References
