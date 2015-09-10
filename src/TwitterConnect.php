@@ -250,7 +250,8 @@ class TwitterConnect extends \TwigSimpleHybrid
 
 			// Disable when activation is required.
 			if ($this->twitter_activation_required) {
-				$member->disable = 1;
+				$member->activation = md5(uniqid(mt_rand(), true));
+				$member->disable    = 1;
 			}
 
 			$event = new PostConnectEvent($params, $userData, $member, $newMember);
